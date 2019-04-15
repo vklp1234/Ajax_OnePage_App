@@ -2,7 +2,8 @@
 include "db_connect.php";
 extract($_POST);
 if(isset($_POST['tempshowdata'])){
-    $Query="SELECT * FROM `ajaxrecord` ";
+    $status = '1';
+    $Query="SELECT * FROM `ajaxrecord` where `status` ='$status' ";
     $run =mysqli_query($con,$Query);
     $data ='<table class="table table-hover">
             <thead>
@@ -40,7 +41,7 @@ if(isset($_POST['tempshowdata'])){
 }
 if(isset($_POST['deleteid']))
 {
-    $Query = "DELETE From `ajaxrecord` where `id`='$deleteid'";
+    $Query = "UPDATE `ajaxrecord` SET `status`='2' WHERE `id`='$deleteid'";
     if(!$run = mysqli_query($con,$Query))
     {
         echo '<script>alert("Something Went Wrong");</script>';
