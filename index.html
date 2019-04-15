@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <title>Ajax By Veer</title>
+        <link rel="stylesheet" type="text/css" href="bootstarp/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="bootstarp/bootstrap.css">
+    </head>
+    <body>
+        <div class="container" >
+            <div id="add">    
+                <h2><b>Insertion Through Plugins</b></h2>
+                <div class="form-group">
+                    <label for="Name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter Your Name">
+                </div>
+                <div class="form-group">
+                    <label for="Username">UserName</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter Your Username">
+                </div>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <input type="Email" class="form-control" id="email" placeholder="Enter Your email">
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter Your password">
+                </div>
+                <button id="submit"  class="btn btn-success " onclick="Insertdata()"> Submit</button>
+               
+            </div>
+            <div id="Upadte" style="display:none;" >    
+                    <h2><b>Update Plugins</b></h2>
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="upadate_name" placeholder="Enter Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Username">UserName</label>
+                        <input type="text" class="form-control" id="upadate_username" placeholder="Enter Your Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="Email" class="form-control" id="upadate_email" placeholder="Enter Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" class="form-control" id="upadate_password" placeholder="Enter Your password">
+                    </div>
+                    <input type="hidden" class="form-control" id="upadate_hidden">
+                    <button id="submit1"  class="btn btn-success " onclick="UpdateUser()">upadte</button>
+                    
+                </div>
+                <div id="table1">
+
+                    </div> 
+                
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+        <script>
+            $(document).ready(function()
+            {
+                showdata();
+                //$('#Upadte').hide();
+            });
+            function showdata()
+            {
+                var tempshowdata = "tempshowdata";
+                $.ajax({
+                    url: "insert.php",
+                    type:"post",
+                    data:{ tempshowdata:tempshowdata },
+                    success:function(data,status) {
+                        console.log(data);
+                        $("#table1").html(data);
+                    }
+                });
+            }
+            function Insertdata()
+            {
+                var name = $("#name").val();
+                var user_name = $("#username").val();
+                var email = $("#email").val();
+                var pwd = $("#password").val();
+                //console.log(name,user_name,email,pwd);
+                $.ajax({
+                         url:"Insert.php",
+                         type:'post',
+                         data:{ name:name,
+                            username:user_name,
+                            email:email,
+                            pwd:pwd
+                          },
+                          success:function(data,status){
+                                showdata();
+                          }
+                });
+               
+            }
+            function Deleteuser(deleteid)
+            {
+                var cf = confirm("Do you really want to delete record");
+                if(cf == true)
+                {
+                    $.ajax({
+                        url: "Insert.php",
+                        type:'post',
+                        data:{ deleteid:deleteid },
+                        success:function(data,status){
+                            showdata();
+                        }
+                    });
+                }
+            }
+            function edituser(updateid)
+            {
+                    $('#upadate_hidden').val(updateid);
+                    $.post('Insert.php',{
+                        updateid:updateid
+                    },
+                    function(data,status){
+                        var user =JSON.parse(data);
+                        $('#upadate_name').val(user.name);  
+                        $('#upadate_username').val(user.username);  
+                        $('#upadate_email').val(user.email);  
+                        $('#upadate_password').val(user.password);  
+                    });
+                    $('#Upadte').show();
+                    $('#add').hide();
+            }
+            function UpdateUser()
+            {
+                var upadate_name = $("#upadate_name").val();
+                var upadate_username = $("#upadate_username").val();
+                var upadate_email = $("#upadate_email").val();
+                var upadate_pwd = $("#upadate_password").val();
+                var upadate_hidden = $("#upadate_hidden").val();
+               console.log(upadate_name,upadate_username,upadate_email,upadate_pwd,upadate_hidden);
+                
+                $.post('Insert.php',{ 
+                            upadate_hidden:upadate_hidden ,
+                             upadate_name:upadate_name,
+                             upadate_username:upadate_username,
+                             upadate_email:upadate_email,
+                             upadate_pwd:upadate_pwd
+                             },
+                              function(data,status){
+                            $('#Upadte').hide();
+                            $('#add').show();
+                            showdata();
+                        });
+            }
+                
+        
+        </script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+</html>
